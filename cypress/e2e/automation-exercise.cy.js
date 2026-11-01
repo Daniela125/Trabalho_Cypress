@@ -9,20 +9,13 @@ describe('Automation Exercise', () => {
     const email = `pgats-aut-${Date.now()}@mail.com`
 
     cy.visit('https://www.automationexercise.com')
-    cy.get('a[href*=login]').click()
+    cy.get('a[href*="login"]').click()
 
     // Dados de cadastro inicial
-    //cy.get('[data-qa="signup-name"]').type('PGATS Aut')
-    const email = `pgats-aut-${Date.now()}@mail.com`;
-
-cy.get('[data-qa="signup-name"]').type('PGATS Aut');
-cy.get('[data-qa="signup-email"]')
-  .should('be.enabled')
-  .type(email);
-
-cy.get('[data-qa="signup-button"]').click();
-
-    cy.get('[data-qa="signup-email"]').type(email)
+    cy.get('[data-qa="signup-name"]').type('PGATS Aut')
+    cy.get('[data-qa="signup-email"]')
+      .should('be.enabled')
+      .type(email)
     cy.get('[data-qa="signup-button"]').click()
 
     // Dados da conta (radio -> check)
