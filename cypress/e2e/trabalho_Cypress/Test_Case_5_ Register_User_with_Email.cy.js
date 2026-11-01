@@ -3,6 +3,13 @@
 const baseUrl = 'https://www.automationexercise.com'
 
 describe('Test Case 5: Register User with existing email', () => {
+ beforeEach(() => {
+  cy.intercept({ url: /googlesyndication|doubleclick|adtrafficquality|googleads/ }, { statusCode: 204, body: '' })
+})
+ 
+  // Ignora erros de scripts de terceiros (anúncios)
+  Cypress.on('uncaught:exception', () => false)
+
   it('Deve exibir erro ao cadastrar com e-mail já existente', () => {
     const nome = 'PGATS Aut'
     const email = `pgats-aut-${Date.now()}@mail.com`
@@ -34,28 +41,21 @@ describe('Test Case 5: Register User with existing email', () => {
 
     // Sair para poder tentar um novo cadastro
     cy.contains('a', 'Logout').click()
+    cy.url().should('include', '/login') // aguarda o logout terminar
 
     // ---------------- Test Case 5 ----------------
-    // 1 e 2. Abrir o navegador e acessar a URL
     cy.visit(baseUrl)
-
-    // 3. Verificar que a home está visível
     cy.title().should('contain', 'Automation Exercise')
 
-    // 4. Clicar em 'Signup / Login'
-    cy.get('a[href="/login"]').click()
+    // Já estamos deslogados; o link pode ser coberto por anúncio -> force
+    cy.get('a[href="/login"]').first().should('exist').click({ force: true })
 
-    // 5. Verificar 'New User Signup!'
     cy.contains('h2', 'New User Signup!').should('be.visible')
 
-    // 6. Informar nome e e-mail já cadastrado
     cy.get('[data-qa="signup-name"]').type(nome)
     cy.get('[data-qa="signup-email"]').type(email)
-
-    // 7. Clicar em 'Signup'
     cy.get('[data-qa="signup-button"]').click()
 
-    // 8. Verificar a mensagem de erro
     cy.contains('Email Address already exist!').should('be.visible')
   })
 })

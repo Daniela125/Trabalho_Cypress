@@ -1,6 +1,7 @@
 // Test Case 2: Login User with correct email and password
 // Arquivo sugerido: Test_Case_02_Login_User.cy.js
 // ---------------------------------------------------------------
+const baseUrl = 'https://www.automationexercise.com'
 describe('Test Case 2: Login User with correct email and password', () => {
   const nome = 'PGATS Login'
   const senha = '12345'
